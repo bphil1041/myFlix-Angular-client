@@ -1,0 +1,7 @@
+<div class="modal" *ngIf="genre" (click)="onBackgroundClick($event)">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>{{ genre.genreName }}</h2>
+        <p>{{ genre.description }}</p>
+    </div>
+</div>
