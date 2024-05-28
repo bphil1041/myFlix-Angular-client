@@ -1,0 +1,24 @@
+<div class="profile-container">
+    <h2>Profile Information</h2>
+    <mat-card>
+        <mat-card-title>{{ user.Username }}</mat-card-title>
+        <mat-card-content>
+            <p><strong>Birthday:</strong> {{ user.Birthday | date }}</p>
+            <p><strong>Email:</strong> {{ user.Email }}</p>
+            <button mat-button color="primary" (click)="openEditDialog()">Edit Profile</button>
+            <button mat-button color="warn" (click)="deleteUser()">Delete Account</button>
+        </mat-card-content>
+    </mat-card>
+
+    <h2>Favorite Movies</h2>
+    <div class="favorite-movies">
+        <mat-card *ngFor="let movie of favoriteMovies" class="movie-card">
+            <mat-card-header>
+                <mat-card-title>{{ movie }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button color="warn" (click)="removeFavorite(movie)">Remove</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
