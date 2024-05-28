@@ -12,6 +12,7 @@ import { SynopsisComponent } from '../synopsis/synopsis.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
+  userId: string = 'your-user-id'; // Replace with the actual user ID
 
   constructor(public fetchApiData: FetchApiDataService, public dialog: MatDialog) { }
 
@@ -46,5 +47,13 @@ export class MovieCardComponent implements OnInit {
     dialogConfig.data = { movie };  // Corrected to pass the movie object
     dialogConfig.disableClose = false;
     this.dialog.open(SynopsisComponent, dialogConfig);
+  }
+
+  addToFavorites(movieId: string): void {
+    this.fetchApiData.addFavoriteMovie(movieId).subscribe((response) => {
+      console.log('Movie added to favorites', response);
+    }, (error) => {
+      console.error('Error adding movie to favorites', error);
+    });
   }
 }
