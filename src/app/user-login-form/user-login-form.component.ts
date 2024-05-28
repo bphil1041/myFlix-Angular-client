@@ -30,7 +30,6 @@ export class UserLoginFormComponent implements OnInit {
         // Logic for a successful user login
         localStorage.setItem('user', JSON.stringify(result.user));
         localStorage.setItem('token', result.token);
-        this.dialogRef.close(); // Will close modal on success
         this.snackBar.open('User login successful', 'OK', {
           duration: 2000
         });
@@ -40,7 +39,11 @@ export class UserLoginFormComponent implements OnInit {
         this.snackBar.open(`User login failed: ${error}`, 'OK', {
           duration: 2000
         });
+      },
+      () => {
+        this.dialogRef.close(); // Will close modal regardless of success or failure
       }
     );
   }
+
 }
