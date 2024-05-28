@@ -1,0 +1,13 @@
+/* nav-bar.component.css */
+
+mat-toolbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+mat-toolbar-row {
+    display: flex;
+    justify-content: left;
+}
