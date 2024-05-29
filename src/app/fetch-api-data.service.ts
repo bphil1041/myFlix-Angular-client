@@ -157,6 +157,11 @@ export class FetchApiDataService {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
+    // Initialize the FavoriteMovies array if it's undefined or null
+    if (!user.FavoriteMovies) {
+      user.FavoriteMovies = [];
+    }
+
     user.FavoriteMovies.push(movieId);
     localStorage.setItem('user', JSON.stringify(user));
 
@@ -170,6 +175,7 @@ export class FetchApiDataService {
       catchError(this.handleError),
     );
   }
+
 
 
   deleteFavoriteMovie(movieId: string): Observable<any> {
