@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditUserDialogComponent } from '../edit-user-dialog-component/edit-user-dialog.component';
-import { Router } from '@angular/router';  // Import Router
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,10 +17,13 @@ export class ProfileComponent implements OnInit {
     private fetchApiData: FetchApiDataService,
     public dialog: MatDialog,
     private router: Router
-
   ) { }
 
   ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  loadUserData(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.Username) {
       this.getUserInfo(user.Username);
@@ -44,22 +47,10 @@ export class ProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.editUser(result);
+        this.user = result; // Update the user object with the new data
+        localStorage.setItem('user', JSON.stringify(this.user)); // Update local storage with the new user data
+        this.loadUserData(); // Reload user data to reflect changes
       }
-    });
-  }
-
-  editUser(updatedUser: any): void {
-    this.fetchApiData.editUser(updatedUser).subscribe((resp: any) => {
-      console.log('User updated successfully', resp);
-
-      // Update the local storage with the updated user data
-      localStorage.setItem('user', JSON.stringify(resp));
-
-      // Refresh user info
-      this.getUserInfo(resp.UserName);
-    }, (error) => {
-      console.error('Error updating user:', error);
     });
   }
 
