@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   user: any = {};
   favoriteMovies: any[] = [];
+  allMovies: any[] = [];
 
   constructor(
     private fetchApiData: FetchApiDataService,
@@ -27,9 +28,7 @@ export class ProfileComponent implements OnInit {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.Username) {
       this.getUserInfo(user.Username);
-      this.fetchApiData.getFavoriteMovies(user.Username).subscribe((movies: any[]) => {
-        this.favoriteMovies = movies;
-      });
+      this.getMoviesAndFavorites(user.Username);
     }
   }
 
@@ -47,9 +46,9 @@ export class ProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.user = result; // Update the user object with the new data
-        localStorage.setItem('user', JSON.stringify(this.user)); // Update local storage with the new user data
-        this.loadUserData(); // Reload user data to reflect changes
+        this.user = result;
+        localStorage.setItem('user', JSON.stringify(this.user));
+        this.loadUserData();
       }
     });
   }
@@ -59,7 +58,7 @@ export class ProfileComponent implements OnInit {
     this.fetchApiData.deleteUser(username).subscribe(() => {
       console.log('User deleted successfully');
       localStorage.clear();
-      this.router.navigate(['welcome']);  // Redirect to the welcome page
+      this.router.navigate(['welcome']);
     }, (error) => {
       console.error('Error deleting user:', error);
     });
@@ -67,14 +66,24 @@ export class ProfileComponent implements OnInit {
 
   removeFavorite(movieId: string): void {
     this.fetchApiData.deleteFavoriteMovie(movieId).subscribe(() => {
-      console.log('Movie removed from API. Refreshing favorite movies list...');
-      this.getFavoriteMovies(this.user.Username);
+      console.log('Movie removed from favorites');
+      this.loadUserData();
     });
   }
 
-  getFavoriteMovies(username: string): void {
-    this.fetchApiData.getFavoriteMovies(username).subscribe((resp: any[]) => {
-      this.favoriteMovies = resp;
+  getMoviesAndFavorites(username: string): void {
+    this.fetchApiData.getAllMovies().subscribe((movies: any[]) => {
+      this.allMovies = movies;
+      this.fetchApiData.getFavoriteMovies(username).subscribe((movieIds: string[]) => {
+        this.favoriteMovies = movieIds.map((movieId) => {
+          const movie = this.allMovies.find((m: any) => m._id === movieId);
+          return { _id: movieId, title: movie ? movie.title : '' };
+        });
+      }, (error) => {
+        console.error('Error fetching favorite movies', error);
+      });
+    }, (error) => {
+      console.error('Error fetching all movies', error);
     });
   }
 }
