@@ -25,7 +25,7 @@ import { SynopsisComponent } from './synopsis/synopsis.component';
 import { GenreInfoComponent } from './genre-info/genre-info.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProfileComponent } from './profile/profile.component';
-import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component'; // Ensure to add this line
+import { EditUserDialogComponent } from './edit-user-dialog-component/edit-user-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
