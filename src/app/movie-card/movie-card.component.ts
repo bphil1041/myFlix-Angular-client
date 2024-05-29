@@ -12,7 +12,7 @@ import { SynopsisComponent } from '../synopsis/synopsis.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
-  userId: string = 'your-user-id'; // Replace with the actual user ID
+  userId: string = '';
 
   constructor(public fetchApiData: FetchApiDataService, public dialog: MatDialog) { }
 
@@ -31,29 +31,30 @@ export class MovieCardComponent implements OnInit {
   openDirectorInfo(director: any): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = { director };
-    dialogConfig.disableClose = false; // Ensure the modal can be closed by clicking outside
+    dialogConfig.disableClose = false;
     this.dialog.open(DirectorInfoComponent, dialogConfig);
   }
 
   openGenreInfo(genre: any): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = { genre };
-    dialogConfig.disableClose = false; // Ensure the modal can be closed by clicking outside
+    dialogConfig.disableClose = false;
     this.dialog.open(GenreInfoComponent, dialogConfig);
   }
 
   openSynopsis(movie: any): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = { movie };  // Corrected to pass the movie object
+    dialogConfig.data = { movie };
     dialogConfig.disableClose = false;
     this.dialog.open(SynopsisComponent, dialogConfig);
   }
 
-  addToFavorites(movieId: string): void {
-    this.fetchApiData.addFavoriteMovie(movieId).subscribe((response) => {
+  addToFavorites(movieTitle: string): void {
+    this.fetchApiData.addFavoriteMovie(movieTitle.toLowerCase()).subscribe((response) => {
       console.log('Movie added to favorites', response);
     }, (error) => {
       console.error('Error adding movie to favorites', error);
     });
   }
+
 }
