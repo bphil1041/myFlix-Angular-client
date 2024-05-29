@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import * as bcrypt from 'bcryptjs';
+
 
 
 const apiUrl = 'https://myflixbp-ee7590ef397f.herokuapp.com/';
@@ -104,29 +106,52 @@ export class FetchApiDataService {
   editUser(updatedUser: any): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
+
+    // Log the initial user data and the updated data
+    console.log('Initial User:', user);
+    console.log('Updated User Before Hashing:', updatedUser);
+
+    // Hash the password if it is being updated
+    if (updatedUser.Password) {
+      const salt = bcrypt.genSaltSync(10);
+      updatedUser.Password = bcrypt.hashSync(updatedUser.Password, salt);
+    }
+
+    // Log the updated user data after hashing
+    console.log('Updated User After Hashing:', updatedUser);
+
     return this.http.put(apiUrl + 'users/' + user.Username, updatedUser, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
     }).pipe(
-      map(() => updatedUser), // Return the updated user data
+      map((response: any) => {
+        console.log('API Response:', response); // Log the API response
+        return updatedUser; // Return the updated user data
+      }),
       catchError(this.handleError)
     );
   }
 
 
 
-  deleteUser(): Observable<any> {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  deleteUser(username: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + user._id, {
+    return this.http.delete(apiUrl + 'users/' + username, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
-      })
+      }),
+      responseType: 'text' // Ensure the response type is 'text' since the server sends back a plain text message
     }).pipe(
+      map((response: any) => {
+        return response;
+      }),
       catchError(this.handleError)
     );
   }
+
+
 
   addFavoriteMovie(movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
@@ -195,4 +220,6 @@ export class FetchApiDataService {
     return throwError(
       'Something bad happened; please try again later.');
   }
+
+
 }
