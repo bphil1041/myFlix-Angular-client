@@ -2,8 +2,12 @@
 <mat-dialog-content>
     <form [formGroup]="editForm">
         <mat-form-field appearance="fill">
-            <mat-label>Username</mat-label>
+            <mat-label>Current Username</mat-label>
             <input matInput formControlName="username">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>New Username</mat-label>
+            <input matInput formControlName="newUsername">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Email</mat-label>
