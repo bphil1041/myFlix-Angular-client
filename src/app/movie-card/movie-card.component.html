@@ -13,20 +13,9 @@
             <button mat-button color="primary" (click)="openGenreInfo(movie.genre)">Genre</button>
             <button mat-button color="primary" (click)="openDirectorInfo(movie.director)">Director</button>
             <button mat-button color="primary" (click)="openSynopsis(movie)">Synopsis</button>
-            <button mat-button color="primary" (click)="addToFavorites(movie._id)">Favorite</button>
+            <button mat-button color="primary" (click)="addToFavorites(movie._id)">
+                <mat-icon>favorite_border</mat-icon>
+            </button>
         </mat-card-actions>
     </mat-card>
 </div>
-
-
-
-
-
-<!--
-<mat-card *ngFor="let movie of movies; let i=index;">
-    <mat-dialog-content>
-        <mat-card-title>{{movie.title}}</mat-card-title>
-        <mat-card-subtitle><img src="{{movie.image}}" /></mat-card-subtitle>
-    </mat-dialog-content>
-</mat-card>
--->
