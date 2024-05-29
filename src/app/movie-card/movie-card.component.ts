@@ -49,12 +49,34 @@ export class MovieCardComponent implements OnInit {
     this.dialog.open(SynopsisComponent, dialogConfig);
   }
 
-  addToFavorites(movieTitle: string): void {
-    this.fetchApiData.addFavoriteMovie(movieTitle.toLowerCase()).subscribe((response) => {
+  addToFavorites(movieId: string): void {
+    this.fetchApiData.addFavoriteMovie(movieId).subscribe((response) => {
       console.log('Movie added to favorites', response);
+
+      // Fetch all movies to find the movie title
+      this.fetchApiData.getAllMovies().subscribe((movies) => {
+        const movie = movies.find((m: any) => m._id === movieId);
+        if (movie) {
+          console.log('Movie title:', movie.title);
+
+          // Update the movies array after successfully adding a favorite movie
+          const updatedMovies = this.movies.map((m: any) => {
+            if (m._id === movieId) {
+              return { ...m, favoriteMovie: true, title: movie.title };
+            } else {
+              return m;
+            }
+          });
+          this.movies = updatedMovies;
+        }
+      }, (error) => {
+        console.error('Error fetching all movies', error);
+      });
+
     }, (error) => {
       console.error('Error adding movie to favorites', error);
     });
   }
+
 
 }
