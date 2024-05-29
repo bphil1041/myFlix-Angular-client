@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
-import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
+import { EditUserDialogComponent } from '../edit-user-dialog-component/edit-user-dialog.component';
+import { Router } from '@angular/router';  // Import Router
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private fetchApiData: FetchApiDataService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router
+
   ) { }
 
   ngOnInit(): void {
@@ -47,16 +50,27 @@ export class ProfileComponent implements OnInit {
   }
 
   editUser(updatedUser: any): void {
-    this.fetchApiData.editUser(updatedUser).subscribe(() => {
-      console.log('User updated successfully');
-      this.getUserInfo(updatedUser.Username);
+    this.fetchApiData.editUser(updatedUser).subscribe((resp: any) => {
+      console.log('User updated successfully', resp);
+
+      // Update the local storage with the updated user data
+      localStorage.setItem('user', JSON.stringify(resp));
+
+      // Refresh user info
+      this.getUserInfo(resp.UserName);
+    }, (error) => {
+      console.error('Error updating user:', error);
     });
   }
 
   deleteUser(): void {
-    this.fetchApiData.deleteUser().subscribe(() => {
+    const username = this.user.Username;
+    this.fetchApiData.deleteUser(username).subscribe(() => {
       console.log('User deleted successfully');
-      // Perform any additional actions after deletion, such as redirecting to a different page
+      localStorage.clear();
+      this.router.navigate(['welcome']);  // Redirect to the welcome page
+    }, (error) => {
+      console.error('Error deleting user:', error);
     });
   }
 
