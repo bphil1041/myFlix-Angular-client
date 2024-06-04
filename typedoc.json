@@ -1,0 +1,11 @@
+{
+    "entryPoints": [
+        "src/app/fetch-api-data.service.ts"
+    ],
+    "out": "docs",
+    "exclude": [
+        "**/*.spec.ts"
+    ],
+    "includeVersion": true,
+    "excludeExternals": true
+}
