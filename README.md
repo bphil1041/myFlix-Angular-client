@@ -5,7 +5,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Description
 
-This Chat App was built using React Native, and provides users with a chat interface and options to share images and their location. 
+This project uses Angular to build the client-side for an application called myFlix, which is based on its existing service-side code (REST API and database). 
 
 ## Development server
 
