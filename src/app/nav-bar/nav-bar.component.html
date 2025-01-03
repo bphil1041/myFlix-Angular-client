@@ -1,7 +1,8 @@
 <mat-toolbar color="primary" *ngIf="!isWelcomePage()">
     <mat-toolbar-row>
-        <button mat-button routerLink="/profile">Profile</button>
-        <button mat-button routerLink="/movies">Movies</button>
-        <button mat-button (click)="logout()">Logout</button>
+        <button mat-button class="title" routerLink="/movies">myFlix</button>
+        <button mat-button class="nav-button" routerLink="/profile">Profile</button>
+        <button mat-button class="nav-button" routerLink="/movies">Movies</button>
+        <button mat-button class="nav-button" (click)="logout()">Logout</button>
     </mat-toolbar-row>
 </mat-toolbar>
